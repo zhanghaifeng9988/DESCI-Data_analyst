@@ -146,7 +146,7 @@ CometBFT 是一款用于在多台机器上安全一致地复制应用程序的�
 - **Data Providers**：提供链上或链下数据；
 - **Data Consumers**：像 LLM/开发人员/数据工程师等消费者。
 - **SCP**：基于存储的共识范式。这就是数据集的证明方式。
-- **CDC（Changelog）**：变更数据捕获。数据永久存储在 Arweave 中，例如由 CDC 生成的变更日志。
+- **CDC（Changelog）**：变更数据捕获chage data capture。数据永久存储在 Arweave 中，例如由 CDC 生成的变更日志。
 - **Dataset**：存储在任何数据库或文件系统中的数据集。数据消费者可以通过 API / SQL / Sync 直接访问它。
 - **Data Manifest**：数据清单是包含有关数据集信息的元数据文件。
 
