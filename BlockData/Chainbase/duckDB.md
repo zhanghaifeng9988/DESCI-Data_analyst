@@ -374,6 +374,16 @@ total 556
 └────────────┴───────────┴───────┘
 
 
+# 本次开发环境安装配置解释
+## 下载
+curl -LO https://github.com/duckdb/duckdb/releases/download/v0.9.2/duckdb_cli-linux-amd64.tar.gz
+## 创建数据库文件和mytest数据库，如果数据库已经存在，则进入数据库
+ ./duckdb data/mytest.db
+
+只读模式：./duckdb -readonly data/mytest.db
+**注意：** dcukdb的数据库，不能同时读写，可以同时多个只读模式打开数据库文件
+，但无法在有写打开的情况，继续打开读取数据库。
+
 ### nodejs的连接测试
 - 安装依赖包
 [root@localhost ~]# npm install duckdb
