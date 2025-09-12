@@ -60,9 +60,9 @@ D
 英文提示的翻译是：输入“.help”获取使用提示。
 已连接到临时内存数据库。
 使用“.open 文件名”重新打开持久数据库。
-默认情况下，DuckDB 是运行在内存数据库中，这意味着创建的任何表都存储在内存中，
+**默认情况下，DuckDB 是运行在内存数据库中**，这意味着创建的任何表都存储在内存中，
 而不是持久化到磁盘上。
-可以通过启动命令行参数的方式，将 DuckDB 连接到磁盘上的持久化数据库文件。
+**可以通过启动命令行参数的方式，将 DuckDB 连接到磁盘上的持久化数据库文件。**
 任何写入该数据库连接的数据都将保存到磁盘文件中，并在重新连接到同一文件时重新加载。
 
 .quit  退出
@@ -75,7 +75,7 @@ show databases;
 └───────────────┘
 
 .open my.db  创建一个名字叫做my的数据库，如果数据库存在，则打开该数据库。
-
+**注意，这里的数据库是内存数据，重新登录就没有了。**
 
 ## 主要命令
 show tables; 显示当前数据库中的所有表
@@ -99,7 +99,7 @@ Li,Si,48
 Wang,Wu,23
 
 ### 查询csv文件内容，并将内容导入数据库的表中
-[zhf@localhost ~]$ duckdb my.db
+[zhf@localhost ~]$ duckdb my.db    --创建持久化数据库文件，打开持久化数据文件
 DuckDB v1.3.2 (Ossivalis) 0b83e5d2f6
 Enter ".help" for usage hints.
 D SELECT * FROM read_csv_auto('test.csv');
@@ -334,6 +334,52 @@ D  SELECT * FROM test_sql;
 │ Wang       │ Wu        │    23 │
 
 
+ ##查询当前数据库中的所有**索引**信息；
+SELECT * FROM duckdb_indexes(); 
+## 查询指定表的所有**索引**信息； 
+SELECT * FROM duckdb_indexes()
+WHERE table_name = 'fundraising_spawned';  
+
+## 查询指定表的列级注释
+select database_name,schema_name ,table_name,column_name,data_type, comment 
+      from duckdb_columns()
+      WHERE table_name = 'molecule_labs_projects_funding_plan'
+      ORDER BY column_index;
+
+## 查询表级注释
+SELECT
+    schema_name,
+    table_name,
+    comment
+FROM duckdb_tables
+WHERE comment IS NOT NULL;
+
+
+
+## 显示所有列的信息
+ .mode line
+
+## -- 查看所有数据库和schema
+SELECT * FROM information_schema.schemata;
+
+## -- 查看当前使用的schema（通常是main）
+SELECT current_schema();
+
+## -- 切换schema
+SET search_path = 'metadata';
+** 这样操作，会让show tables命令下，看到main这个schema和metadata这个schema下的所有表
+这么操作后，就可以不带shcema名称的方式，去直接操作metadata这个schema下的表 **
+
+## -- 或者查看当前数据库的所有表
+SELECT * FROM information_schema.tables;
+
+## -- 简单查看表列表
+SHOW TABLES;
+
+
+
+
+
 ## 附加器
 在 C++ 和 Java 中，附加器可以用作批量数据加载的替代方法。该类可用于高效地向数据库系统添加行，而无需使用SQL。
 
@@ -506,4 +552,6 @@ Node.js处理数据获取和转换
 这种渐进式的方法可以让您在理解数据的同时，逐步构建系统，避免过早的复杂化。
 
 您认为这个方向是否符合您的需求？我们可以先专注于完成区块链数据的获取和存储，然后再逐步扩展到其他数据源。
+
+
 
